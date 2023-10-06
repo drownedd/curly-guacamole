@@ -30,20 +30,24 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 import jade.input.listeners.KeyListener;
 import jade.input.listeners.MouseListener;
+import jade.scenes.LevelEditorScene;
+import jade.scenes.LevelScene;
+import jade.scenes.Scene;
 import jade.utils.Constants;
+import jade.utils.Constants.SceneListing;
+import jade.utils.Time;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
 
-/**
- * Singleton class game window.
- */
 public class Window {
 
     private static Window window;
+    private static Scene currentScene;
+
     private final String title;
+    public float r, g, b, a;
     private int width, height;
-    private float r, g, b, a;
     /**
      * Address memory where the window is stored
      */
@@ -54,10 +58,7 @@ public class Window {
         this.width = Constants.Window.INITIAL_WIDTH;
         this.height = Constants.Window.INITIAL_HEIGHT;
         this.title = Constants.Window.TITLE;
-        this.r = Constants.Window.R;
-        this.g = Constants.Window.G;
-        this.b = Constants.Window.B;
-        this.a = Constants.Window.A;
+        this.r = this.g = this.b = this.a = 1.0f;
     }
 
     public static Window get() {
@@ -124,17 +125,33 @@ public class Window {
         // thread, creates the GLCapabilities instance and makes the OpenGL bindings available
         // for use.
         GL.createCapabilities();
+
+        Window.changeScene(SceneListing.LEVEL_EDITOR);
     }
 
     private void loop() {
+        float endTime, dt = -1.0f, beginTime = Time.getTime();
+
         while (!glfwWindowShouldClose(this.glfwWindow)) {
             glfwPollEvents();
 
             glClearColor(this.r, this.g, this.b, this.a);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            if (dt != -1.0f) {
+                currentScene.update(dt);
+            }
+
             glfwSwapBuffers(this.glfwWindow);
+
+            endTime = Time.getTime();
+            dt = endTime - beginTime;
+            beginTime = endTime;
         }
+    }
+
+    public static void changeScene(SceneListing scene) {
+        currentScene = Scene.getScene(scene);
     }
 
 }

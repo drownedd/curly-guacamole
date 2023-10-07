@@ -30,8 +30,6 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 import jade.input.listeners.KeyListener;
 import jade.input.listeners.MouseListener;
-import jade.scenes.LevelEditorScene;
-import jade.scenes.LevelScene;
 import jade.scenes.Scene;
 import jade.utils.Constants;
 import jade.utils.Constants.SceneListing;
@@ -152,6 +150,7 @@ public class Window {
 
     public static void changeScene(SceneListing scene) {
         currentScene = Scene.getScene(scene);
+        currentScene.init();
     }
 
 }

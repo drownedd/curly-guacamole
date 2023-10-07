@@ -9,6 +9,10 @@ public abstract class Scene {
 
     public abstract void update(float dt);
 
+    public void init() {
+
+    }
+
     public final static Scene getScene(SceneListing scene) {
         switch (scene) {
             case LEVEL_EDITOR:

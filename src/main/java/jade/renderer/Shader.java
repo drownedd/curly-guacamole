@@ -14,13 +14,18 @@ import static org.lwjgl.opengl.GL20.glGetProgramInfoLog;
 import static org.lwjgl.opengl.GL20.glGetProgrami;
 import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 import static org.lwjgl.opengl.GL20.glGetShaderi;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
 import static org.lwjgl.opengl.GL20.glLinkProgram;
 import static org.lwjgl.opengl.GL20.glShaderSource;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 
 import java.io.IOException;
+import java.nio.FloatBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import org.joml.Matrix4f;
+import org.lwjgl.BufferUtils;
 
 public class Shader {
 
@@ -47,7 +52,6 @@ public class Shader {
 
             setPattern(firstPattern, splitSource[1]);
             setPattern(secondPattern, splitSource[2]);
-
         } catch (IOException e) {
             e.printStackTrace();
             assert false : "Error: Could not open shader file: '" + filePath + "'";
@@ -55,7 +59,6 @@ public class Shader {
     }
 
     private void setPattern(String pattern, String patternSource) throws IOException {
-        System.out.println("Pattern: " + pattern);
         if (pattern.equals("vertex")) {
             vertexSource = patternSource;
         } else if (pattern.equals("fragment")) {
@@ -65,9 +68,6 @@ public class Shader {
         }
     }
 
-    /**
-     * Compile and load shader
-     */
     public void compile() {
         int vertexID, fragmentID;
 
@@ -123,5 +123,12 @@ public class Shader {
 
     public void detach() {
         glUseProgram(0);
+    }
+
+    public void uploadMat4f(String varName, Matrix4f mat4) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+        FloatBuffer matBuffer = BufferUtils.createFloatBuffer(16);
+        mat4.get(matBuffer);
+        glUniformMatrix4fv(varLocation, false, matBuffer);
     }
 }

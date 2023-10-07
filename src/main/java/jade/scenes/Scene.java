@@ -1,8 +1,11 @@
 package jade.scenes;
 
+import jade.renderer.Camera;
 import jade.utils.Constants.SceneListing;
 
 public abstract class Scene {
+
+    protected Camera camera;
 
     protected Scene() {
     }

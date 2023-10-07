@@ -17,31 +17,33 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
+import jade.renderer.Camera;
 import jade.renderer.Shader;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 
 public class LevelEditorScene extends Scene {
 
-    private float[] vertexArray = {
+    private final float[] vertexArray = {
         // Position and color of the vertices
         // (x, y , z, r, g, b, a)
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Bottom right  0
-        0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // Top right      1
-        -0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, // Top left      2
-        -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, // Bottom left  3
+        100f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // Bottom right  0
+        100f, 100f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // Top right      1
+        0.0f, 100f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, // Top left      2
+        0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, // Bottom left  3
     };
 
     // IMPORTANT: Must be in counter-clockwise order
-    private int[] elementArray = {
+    private final int[] elementArray = {
         0, 1, 2, // Top right triangle
         0, 2, 3 // Bottom left triangle
     };
 
-    private int vaoID, vboID, eboID;
-
     private Shader defaultShader;
+
+    private int vaoID;
 
     public LevelEditorScene() {
         super();
@@ -49,7 +51,10 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void update(float dt) {
+        camera.position.x -= dt * 50.0f;
         defaultShader.use();
+        defaultShader.uploadMat4f("uProjection", camera.getProjectionMatrix());
+        defaultShader.uploadMat4f("uView", camera.getViewMatrix());
         // Bind the VAO that we're using
         glBindVertexArray(vaoID);
 
@@ -69,9 +74,14 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void init() {
+        this.camera = new Camera(new Vector2f());
         defaultShader = new Shader(DEFAULT_SHADER_FILE_PATH);
         defaultShader.compile();
 
+        int vboID, eboID;
+        // VAO: Vertex Array Object
+        // VBO: Vertex Buffer Object
+        // EBO: Element Buffer Object
         // Generate VAO, VBO, and EBO buffer objects
         vaoID = glGenVertexArrays();
         glBindVertexArray(vaoID);

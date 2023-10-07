@@ -1,6 +1,6 @@
 package jade.scenes;
 
-import static org.lwjgl.opengl.GL11.GL_FALSE;
+import static jade.utils.Constants.Shaders.DEFAULT_SHADER_FILE_PATH;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
@@ -11,42 +11,18 @@ import static org.lwjgl.opengl.GL15.GL_STATIC_DRAW;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL15.glGenBuffers;
-import static org.lwjgl.opengl.GL20.GL_COMPILE_STATUS;
-import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
-import static org.lwjgl.opengl.GL20.GL_INFO_LOG_LENGTH;
-import static org.lwjgl.opengl.GL20.GL_LINK_STATUS;
-import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
-import static org.lwjgl.opengl.GL20.glAttachShader;
-import static org.lwjgl.opengl.GL20.glCompileShader;
-import static org.lwjgl.opengl.GL20.glCreateProgram;
-import static org.lwjgl.opengl.GL20.glCreateShader;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glGetProgramInfoLog;
-import static org.lwjgl.opengl.GL20.glGetProgrami;
-import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
-import static org.lwjgl.opengl.GL20.glGetShaderi;
-import static org.lwjgl.opengl.GL20.glLinkProgram;
-import static org.lwjgl.opengl.GL20.glShaderSource;
-import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import jade.renderer.Shader;
-import jade.utils.Constants.Shaders;
-import jade.utils.Constants.Shaders.Fragments;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import org.lwjgl.BufferUtils;
 
 public class LevelEditorScene extends Scene {
-
-
-    private final String vertexShaderSource = Shaders.Vertices.DEFAULT.getValue();
-    private final String fragmentShaderSource = Fragments.DEFAULT.getValue();
-
-    private int vertexID, fragmentID, shaderProgram;
 
     private float[] vertexArray = {
         // Position and color of the vertices
@@ -93,8 +69,7 @@ public class LevelEditorScene extends Scene {
 
     @Override
     public void init() {
-        defaultShader = new Shader("assets/shaders/default.glsl");
-
+        defaultShader = new Shader(DEFAULT_SHADER_FILE_PATH);
         defaultShader.compile();
 
         // Generate VAO, VBO, and EBO buffer objects

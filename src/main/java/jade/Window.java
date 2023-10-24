@@ -151,6 +151,10 @@ public class Window {
     public static void changeScene(SceneListing scene) {
         currentScene = Scene.getScene(scene);
         currentScene.init();
+        currentScene.start();
     }
 
+    public static Scene getScene() {
+        return get().currentScene;
+    }
 }

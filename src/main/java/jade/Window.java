@@ -1,28 +1,7 @@
 package jade;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
-import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
-import static org.lwjgl.glfw.GLFW.GLFW_MAXIMIZED;
-import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
-import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
-import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
-import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
-import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
-import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
-import static org.lwjgl.glfw.GLFW.glfwInit;
-import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
-import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
-import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
-import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
-import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
-import static org.lwjgl.glfw.GLFW.glfwShowWindow;
-import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
-import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
-import static org.lwjgl.glfw.GLFW.glfwTerminate;
-import static org.lwjgl.glfw.GLFW.glfwWindowHint;
-import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
@@ -33,7 +12,6 @@ import jade.input.listeners.MouseListener;
 import jade.scenes.Scene;
 import jade.utils.Constants;
 import jade.utils.Constants.SceneListing;
-import jade.utils.Time;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
@@ -56,7 +34,8 @@ public class Window {
         this.width = Constants.Window.INITIAL_WIDTH;
         this.height = Constants.Window.INITIAL_HEIGHT;
         this.title = Constants.Window.TITLE;
-        this.r = this.g = this.b = this.a = 1.0f;
+        this.r = this.g = this.b = 0.0f;
+        this.a = 1.0f;
     }
 
     public static Window get() {
@@ -128,7 +107,7 @@ public class Window {
     }
 
     private void loop() {
-        float endTime, dt = -1.0f, beginTime = Time.getTime();
+        float endTime, dt = -1.0f, beginTime = (float)glfwGetTime();
 
         while (!glfwWindowShouldClose(this.glfwWindow)) {
             glfwPollEvents();
@@ -142,7 +121,7 @@ public class Window {
 
             glfwSwapBuffers(this.glfwWindow);
 
-            endTime = Time.getTime();
+            endTime = (float)glfwGetTime();
             dt = endTime - beginTime;
             beginTime = endTime;
         }

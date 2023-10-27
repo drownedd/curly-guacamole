@@ -4,6 +4,7 @@ import jade.Window;
 import jade.gameobjects.GameObject;
 import jade.gameobjects.components.SpriteRenderer;
 import jade.gameobjects.components.Transform;
+import jade.utils.AssetPool;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -34,12 +35,12 @@ public class RenderBatch {
 
     private int vaoID, vboID;
     private final int maxBatchSize;
-    private Shader shader;
+    private final Shader shader;
 
     public RenderBatch(int maxBatchSize) {
         this.maxBatchSize = maxBatchSize;
 
-        this.shader = new Shader("assets/shaders/default.glsl");
+        this.shader = AssetPool.getShader("assets/shaders/default.glsl");
         this.shader.compile();
 
         this.sprites = new SpriteRenderer[maxBatchSize];
